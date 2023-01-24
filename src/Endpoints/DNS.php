@@ -43,13 +43,13 @@ class DNS implements API
         int $ttl = 0,
         bool $proxied = true,
         string $priority = '',
-        array $data = []
+        string $comment = ''
     ): bool {
         $options = [
             'type' => $type,
             'name' => $name,
             'content' => $content,
-            'proxied' => $proxied
+            'proxied' => $proxied,
         ];
 
         if ($ttl > 0) {
@@ -60,8 +60,8 @@ class DNS implements API
             $options['priority'] = (int)$priority;
         }
         
-        if (!empty($data)) {
-            $options['data'] = $data;
+        if ($comment !== '') {
+            $options['comment'] = substr($comment, 0, 50);
         }
 
         $user = $this->adapter->post('zones/' . $zoneID . '/dns_records', $options);
